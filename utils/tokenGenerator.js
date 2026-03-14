@@ -12,6 +12,7 @@ const generateToken = async (email) => {
   } catch (error) {
     // THE BUG: Empty catch block.
     // Error is swallowed and undefined is returned.
+    throw error;
   }
 };
 
