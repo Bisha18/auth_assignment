@@ -1,0 +1,62 @@
+1. LOGIN REQUEST
+
+curl -X POST http://localhost:3000/auth/login \
+-H "Content-Type: application/json" \
+-d '{"email":"your_email@example.com","password":"password123"}'
+
+Response:
+
+{
+ "message": "OTP sent",
+ "loginSessionId": "f2coh"
+}
+
+Server Console Output:
+
+[OTP] Session f2coh generated. OTP: 472916
+
+-----------------------------------------------------------------------------
+2. VERIFY OTP
+
+curl -c cookies.txt -X POST http://localhost:3000/auth/verify-otp \
+-H "Content-Type: application/json" \
+-d '{"loginSessionId":"f2coh","otp":"472916"}'
+
+Response:
+
+{
+ "message": "OTP verified",
+ "sessionId": "f2coh"
+}
+
+cookies.txt created containing session_token.
+
+-----------------------------------------------------------------------------
+3. GET ACCESS TOKEN
+
+curl -b cookies.txt -X POST http://localhost:3000/auth/token
+
+Response:
+
+{
+ "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+ "expires_in": 900
+}
+
+-----------------------------------------------------------------------------
+
+4. ACCESS PROTECTED ROUTE
+
+curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." \
+http://localhost:3000/protected
+
+Response:
+
+{
+ "message": "Access granted",
+ "user": {
+  "email": "your_email@example.com",
+  "sessionId": "f2coh"
+ },
+ "success_flag": "FLAG-YWJjQGV4YW1wbGUuY29tX0NPTVBMRVRFRF9BU1NJR05NRU5U"
+}
